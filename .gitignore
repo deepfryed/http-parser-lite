@@ -1,0 +1,7 @@
+ext/http-parser/*
+!ext/http-parser/*.rb
+!ext/http-parser/*.c
+!ext/http-parser/*.h
+pkg/
+tmp/
+*.gem

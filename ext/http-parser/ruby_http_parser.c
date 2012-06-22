@@ -1,0 +1,110 @@
+// vim:ts=4:sts=4:sw=4:expandtab
+// (c) Bharanee Rathna 2012
+
+#include <ruby/ruby.h>
+#include "http_parser.h"
+
+static VALUE mHTTP, cParser, eParserError;
+
+static void rb_parser_free(http_parser *parser) {
+    if (parser)
+        free(parser);
+}
+
+VALUE rb_parser_allocate(VALUE klass) {
+    http_parser *parser = (http_parser *)malloc(sizeof(http_parser));
+    http_parser_init(parser, HTTP_BOTH);
+    return (VALUE)(parser->data = (void*)Data_Wrap_Struct(klass, 0, rb_parser_free, parser));
+}
+
+http_parser* rb_http_parser_handle(VALUE self) {
+    http_parser *parser = 0;
+    Data_Get_Struct(self, http_parser, parser);
+    if (!parser)
+        rb_raise(rb_eArgError, "Invalid HTTP::Parser instance");
+    return parser;
+}
+
+VALUE rb_parser_callback_for(VALUE self, VALUE name) {
+    return rb_hash_aref(rb_iv_get(self, "@callbacks"), name);
+}
+
+void rb_parser_callback_call(VALUE self, const char *name, char *data, size_t length) {
+    VALUE func = rb_parser_callback_for(self, rb_str_new2(name));
+    if (!NIL_P(func)) {
+        VALUE args = rb_ary_new();
+        if (data)
+            rb_ary_push(args, rb_str_new(data, length));
+        rb_proc_call(func, args);
+    }
+}
+
+int rb_parser_on_url(http_parser *parser, char *data, size_t length) {
+    VALUE self = (VALUE)parser->data;
+    rb_parser_callback_call(self, "on_url", data, length);
+    return 0;
+}
+
+int rb_parser_on_header_field(http_parser *parser, char *data, size_t length) {
+    VALUE self = (VALUE)parser->data;
+    rb_parser_callback_call(self, "on_header_field", data, length);
+    return 0;
+}
+
+int rb_parser_on_header_value(http_parser *parser, char *data, size_t length) {
+    VALUE self = (VALUE)parser->data;
+    rb_parser_callback_call(self, "on_header_value", data, length);
+    return 0;
+}
+
+int rb_parser_on_body(http_parser *parser, char *data, size_t length) {
+    VALUE self = (VALUE)parser->data;
+    rb_parser_callback_call(self, "on_body", data, length);
+    return 0;
+}
+
+int rb_parser_on_message_begin(http_parser *parser) {
+    VALUE self = (VALUE)parser->data;
+    rb_parser_callback_call(self, "on_message_begin", 0, 0);
+    return 0;
+}
+
+int rb_parser_on_message_complete(http_parser *parser) {
+    VALUE self = (VALUE)parser->data;
+    rb_parser_callback_call(self, "on_message_complete", 0, 0);
+    return 0;
+}
+
+VALUE rb_parser_parse(VALUE self, VALUE data) {
+    http_parser *parser = rb_http_parser_handle(self);
+    http_parser_settings settings = {
+        .on_url              = (http_data_cb)rb_parser_on_url,
+        .on_header_field     = (http_data_cb)rb_parser_on_header_field,
+        .on_header_value     = (http_data_cb)rb_parser_on_header_value,
+        .on_body             = (http_data_cb)rb_parser_on_body,
+        .on_message_begin    = (http_cb)rb_parser_on_message_begin,
+        .on_message_complete = (http_cb)rb_parser_on_message_complete
+    };
+
+    size_t parsed = http_parser_execute(parser, &settings, RSTRING_PTR(data), RSTRING_LEN(data));
+    if (parsed != (size_t)RSTRING_LEN(data))
+        rb_raise(eParserError, "Error Parsing data at %d bytes", parsed);
+    return Qtrue;
+}
+
+VALUE rb_parser_reset(VALUE self) {
+    http_parser *parser = rb_http_parser_handle(self);
+    http_parser_init(parser, HTTP_BOTH);
+    return Qtrue;
+}
+
+Init_http_parser() {
+    mHTTP        = rb_define_module("HTTP");
+    cParser      = rb_define_class_under(mHTTP, "Parser", rb_cObject);
+    eParserError = rb_define_class_under(mHTTP, "ParserError", rb_eStandardError);
+
+    rb_define_alloc_func(cParser, rb_parser_allocate);
+    rb_define_method(cParser, "<<",    rb_parser_parse, 1);
+    rb_define_method(cParser, "parse", rb_parser_parse, 1);
+    rb_define_method(cParser, "reset", rb_parser_reset, 0);
+}
