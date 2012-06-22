@@ -48,6 +48,30 @@ parser.reset
 parser << "GET http://www.google.com/ HTTP/1.1\r\n\r\n"
 ```
 
+## API
+
+```
+HTTP::Parser
+    .new
+
+    #reset
+
+    #parse(data)
+    #<<(data)
+
+    #on_message_begin(&block)
+    #on_message_complete(&block)
+    #on_url(&block)
+    #on_header_field(&block)
+    #on_header_value(&block)
+    #on_body(&block)
+
+    #http_status
+    #http_method
+    #http_version
+    #http_content_length
+```
+
 ## License
 
 [Creative Commons Attribution - CC BY](http://creativecommons.org/licenses/by/3.0)

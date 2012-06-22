@@ -88,7 +88,7 @@ VALUE rb_parser_parse(VALUE self, VALUE data) {
 
     size_t parsed = http_parser_execute(parser, &settings, RSTRING_PTR(data), RSTRING_LEN(data));
     if (parsed != (size_t)RSTRING_LEN(data))
-        rb_raise(eParserError, "Error Parsing data at %d bytes", parsed);
+        rb_raise(eParserError, "Error Parsing data: %s", http_errno_description(HTTP_PARSER_ERRNO(parser)));
     return Qtrue;
 }
 
@@ -98,13 +98,34 @@ VALUE rb_parser_reset(VALUE self) {
     return Qtrue;
 }
 
+VALUE rb_parser_http_method(VALUE self) {
+    http_parser *parser = rb_http_parser_handle(self);
+    return rb_str_new2(http_method_str(parser->method));
+}
+
+VALUE rb_parser_http_version(VALUE self) {
+    char version[16];
+    http_parser *parser = rb_http_parser_handle(self);
+    snprintf(version, 16, "%d.%d", parser->http_major, parser->http_minor);
+    return rb_str_new2(version);
+}
+
+VALUE rb_parser_http_status(VALUE self) {
+    http_parser *parser = rb_http_parser_handle(self);
+    return INT2NUM(parser->status_code);
+}
+
 Init_http_parser() {
     mHTTP        = rb_define_module("HTTP");
     cParser      = rb_define_class_under(mHTTP, "Parser", rb_cObject);
     eParserError = rb_define_class_under(mHTTP, "ParserError", rb_eStandardError);
 
     rb_define_alloc_func(cParser, rb_parser_allocate);
-    rb_define_method(cParser, "<<",    rb_parser_parse, 1);
-    rb_define_method(cParser, "parse", rb_parser_parse, 1);
-    rb_define_method(cParser, "reset", rb_parser_reset, 0);
+
+    rb_define_method(cParser, "<<",           rb_parser_parse,        1);
+    rb_define_method(cParser, "parse",        rb_parser_parse,        1);
+    rb_define_method(cParser, "reset",        rb_parser_reset,        0);
+    rb_define_method(cParser, "http_method",  rb_parser_http_method,  0);
+    rb_define_method(cParser, "http_version", rb_parser_http_version, 0);
+    rb_define_method(cParser, "http_status",  rb_parser_http_status,  0);
 }
