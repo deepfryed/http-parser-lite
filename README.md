@@ -69,7 +69,6 @@ HTTP::Parser
     #http_status
     #http_method
     #http_version
-    #http_content_length
 ```
 
 ## License
