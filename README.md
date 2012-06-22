@@ -1,6 +1,6 @@
 # HTTP Parser Lite
 
-A Lite&trade; wrapper around the Joyent http-parser goodness for Ruby
+A Lite&trade; wrapper around the Joyent [http-parser](https://github.com/joyent/http-parser) goodness for Ruby
 
 ## Install
 
