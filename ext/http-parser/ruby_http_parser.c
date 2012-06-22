@@ -30,7 +30,7 @@ VALUE rb_parser_callback_for(VALUE self, VALUE name) {
 }
 
 void rb_parser_callback_call(VALUE self, const char *name, char *data, size_t length) {
-    VALUE func = rb_parser_callback_for(self, rb_str_new2(name));
+    VALUE func = rb_parser_callback_for(self, ID2SYM(rb_intern(name)));
     if (!NIL_P(func)) {
         VALUE args = rb_ary_new();
         if (data)
