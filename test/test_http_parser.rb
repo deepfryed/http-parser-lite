@@ -32,6 +32,39 @@ describe 'http-parser' do
     assert_equal 200,   parser.http_status
   end
 
+
+  it 'should call callbacks' do
+    got = []
+    parser.on_message_begin    {got << 's'}
+    parser.on_message_complete {got << 'e'}
+    parser.on_url              {got << 'u'}
+    parser.on_header_field     {got << 'f'}
+    parser.on_header_value     {got << 'v'}
+    parser.on_body             {got << 'b'}
+
+    parser << "POST / HTTP/1.0\r\nContent-Type: text/plain\r\nContent-Length: 5\r\n\r\nhello"
+    assert_equal %w(s u f v f v b e), got
+  end
+
+  it 'should parse chunked response' do
+    got = []
+    parser.on_url          {|data| got << data}
+    parser.on_header_field {|data| got << data}
+    parser.on_header_value {|data| got << data}
+    parser.on_body         {|data| got << data}
+    parser << "HTTP/1.1 404 OK\r\nContent-Type: text/plain\r\nTransfer-Encoding: chunked\r\n\r\n"
+    parser << "8\r\n"
+    parser << "document\r\n"
+    parser << "3\r\n"
+    parser << "not\r\n"
+    parser << "5\r\n"
+    parser << "found\r\n"
+    parser << "0\r\n"
+
+    assert_equal 404, parser.http_status
+    assert_equal %w(Content-Type text/plain Transfer-Encoding chunked document not found), got
+  end
+
   it 'should parse CONNECT' do
     got = []
     parser.on_url          {|data| got << data}
