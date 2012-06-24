@@ -69,6 +69,10 @@ HTTP::Parser
     #http_status
     #http_method
     #http_version
+
+    #pause
+    #resume
+    #paused?
 ```
 
 ## License

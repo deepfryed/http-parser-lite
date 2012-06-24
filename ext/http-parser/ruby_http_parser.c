@@ -98,6 +98,23 @@ VALUE rb_parser_reset(VALUE self) {
     return Qtrue;
 }
 
+VALUE rb_parser_pause(VALUE self) {
+    http_parser *parser = rb_http_parser_handle(self);
+    http_parser_pause(parser, 1);
+    return Qtrue;
+}
+
+VALUE rb_parser_resume(VALUE self) {
+    http_parser *parser = rb_http_parser_handle(self);
+    http_parser_pause(parser, 0);
+    return Qtrue;
+}
+
+VALUE rb_parser_is_paused(VALUE self) {
+    http_parser *parser = rb_http_parser_handle(self);
+    return HTTP_PARSER_ERRNO(parser) == HPE_PAUSED ? Qtrue : Qfalse;
+}
+
 VALUE rb_parser_http_method(VALUE self) {
     http_parser *parser = rb_http_parser_handle(self);
     return rb_str_new2(http_method_str(parser->method));
@@ -124,6 +141,9 @@ Init_http_parser() {
 
     rb_define_method(cParser, "<<",           rb_parser_parse,        1);
     rb_define_method(cParser, "parse",        rb_parser_parse,        1);
+    rb_define_method(cParser, "pause",        rb_parser_pause,        0);
+    rb_define_method(cParser, "resume",       rb_parser_resume,       0);
+    rb_define_method(cParser, "paused?",      rb_parser_is_paused,    0);
     rb_define_method(cParser, "reset",        rb_parser_reset,        0);
     rb_define_method(cParser, "http_method",  rb_parser_http_method,  0);
     rb_define_method(cParser, "http_version", rb_parser_http_version, 0);
