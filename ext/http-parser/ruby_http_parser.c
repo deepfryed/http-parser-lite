@@ -134,8 +134,8 @@ VALUE rb_parser_http_status(VALUE self) {
 
 Init_http_parser() {
     mHTTP        = rb_define_module("HTTP");
-    cParser      = rb_define_class_under(mHTTP, "Parser", rb_cObject);
-    eParserError = rb_define_class_under(mHTTP, "ParserError", rb_eStandardError);
+    cParser      = rb_define_class_under(mHTTP,   "Parser", rb_cObject);
+    eParserError = rb_define_class_under(cParser, "Error",  rb_eStandardError);
 
     rb_define_alloc_func(cParser, rb_parser_allocate);
 

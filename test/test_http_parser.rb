@@ -78,14 +78,14 @@ describe 'http-parser' do
   end
 
   it 'should raise an error on invalid data' do
-    assert_raises(HTTP::ParserError) { parser << "GET / foobar\r\n" }
+    assert_raises(HTTP::Parser::Error) { parser << "GET / foobar\r\n" }
   end
 
   it 'should pause parser' do
     got = []
     parser.on_url {|data| got << data; parser.pause }
 
-    assert_raises(HTTP::ParserError) do
+    assert_raises(HTTP::Parser::Error) do
       parser << "GET /hello HTTP/1.0\r\n\r\n"
     end
 
