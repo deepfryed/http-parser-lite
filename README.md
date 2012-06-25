@@ -52,7 +52,7 @@ parser << "GET http://www.google.com/ HTTP/1.1\r\n\r\n"
 
 ```
 HTTP::Parser
-    .new(type = TYPE_BOTH)
+    .new(type = HTTP::Parser::TYPE_BOTH)
 
     #reset(type = nil)
     #parse(data)
@@ -72,9 +72,14 @@ HTTP::Parser
     #pause
     #resume
     #paused?
-```
 
-* valid types: TYPE_REQUEST, TYPE_RESPONSE, TYPE_BOTH
+
+Constants:
+
+* HTTP::Parser::TYPE_REQUEST
+* HTTP::Parser::TYPE_RESPONSE
+* HTTP::Parser::TYPE_BOTH
+```
 
 ## License
 
