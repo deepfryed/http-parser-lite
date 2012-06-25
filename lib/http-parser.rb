@@ -23,7 +23,7 @@ module HTTP
 
     def reset value = nil
       if value
-        raise ArgumentError, "Invalid parser type #{type}" unless (0..2).include?(value)
+        raise ArgumentError, "Invalid parser type #{value}" unless [0, 1, 2].include?(value)
         @type = value
       end
 
