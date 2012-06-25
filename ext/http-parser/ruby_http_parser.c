@@ -92,9 +92,9 @@ VALUE rb_parser_parse(VALUE self, VALUE data) {
     return Qtrue;
 }
 
-VALUE rb_parser_reset(VALUE self) {
+VALUE rb_parser_reset_bang(VALUE self, VALUE type) {
     http_parser *parser = rb_http_parser_handle(self);
-    http_parser_init(parser, HTTP_BOTH);
+    http_parser_init(parser, FIX2INT(type));
     return Qtrue;
 }
 
@@ -144,8 +144,9 @@ Init_http_parser() {
     rb_define_method(cParser, "pause",        rb_parser_pause,        0);
     rb_define_method(cParser, "resume",       rb_parser_resume,       0);
     rb_define_method(cParser, "paused?",      rb_parser_is_paused,    0);
-    rb_define_method(cParser, "reset",        rb_parser_reset,        0);
     rb_define_method(cParser, "http_method",  rb_parser_http_method,  0);
     rb_define_method(cParser, "http_version", rb_parser_http_version, 0);
     rb_define_method(cParser, "http_status",  rb_parser_http_status,  0);
+
+    rb_define_private_method(cParser, "reset!", rb_parser_reset_bang, 1);
 }

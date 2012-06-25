@@ -1,3 +1,7 @@
+== 0.3.0 (2012-06-25)
+
+* Added optional type argument to Parser#initialize and Parser#reset
+
 == 0.2.0 (2012-06-25)
 
 * Added Parser#pause, Parser#resume and Parser#paused?

@@ -106,4 +106,33 @@ describe 'http-parser' do
 
     assert %w(/hello X-Test-Field 1), got
   end
+
+  it 'should create parser of appropriate type' do
+    parser = HTTP::Parser.new(HTTP::Parser::TYPE_REQUEST)
+    assert parser << "GET /hello HTTP/1.1\r\n\r\n"
+    assert_raises(HTTP::Parser::Error) do
+      parser << "HTTP/1.1 200 OK\r\n\r\n"
+    end
+  end
+
+  it 'should be able to reset parser to another type' do
+    parser.reset(HTTP::Parser::TYPE_RESPONSE)
+    assert parser << "HTTP/1.1 200 OK\r\nContent-Length: 0\r\n\r\n"
+    assert_raises(HTTP::Parser::Error) do
+      parser << "GET / HTTP/1.1\r\n\r\n"
+    end
+
+    parser.reset(HTTP::Parser::TYPE_REQUEST)
+    assert parser << "GET / HTTP/1.1\r\n\r\n"
+  end
+
+  it '#reset should validate parser type' do
+    assert_raises(ArgumentError) do
+      parser.reset("foo")
+    end
+    assert_raises(ArgumentError) do
+      parser.reset(4)
+    end
+    assert parser.reset(0)
+  end
 end
