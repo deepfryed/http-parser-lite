@@ -25,17 +25,13 @@ http_parser* rb_http_parser_handle(VALUE self) {
     return parser;
 }
 
-VALUE rb_parser_callback_for(VALUE self, VALUE name) {
-    return rb_hash_aref(rb_iv_get(self, "@callbacks"), name);
-}
-
 void rb_parser_callback_call(VALUE self, const char *name, char *data, size_t length) {
-    VALUE func = rb_parser_callback_for(self, ID2SYM(rb_intern(name)));
-    if (!NIL_P(func)) {
+    VALUE callback = rb_hash_aref(rb_iv_get(self, "@callbacks"), ID2SYM(rb_intern(name)));
+    if (!NIL_P(callback)) {
         VALUE args = rb_ary_new();
         if (data)
             rb_ary_push(args, rb_str_new(data, length));
-        rb_proc_call(func, args);
+        rb_proc_call(callback, args);
     }
 }
 
