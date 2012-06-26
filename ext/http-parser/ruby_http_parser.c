@@ -128,6 +128,17 @@ VALUE rb_parser_http_status(VALUE self) {
     return INT2NUM(parser->status_code);
 }
 
+VALUE rb_parser_error_q(VALUE self) {
+    http_parser *parser = rb_http_parser_handle(self);
+    return HTTP_PARSER_ERRNO(parser) != HPE_OK ? Qtrue : Qfalse;
+}
+
+VALUE rb_parser_error(VALUE self) {
+    http_parser *parser = rb_http_parser_handle(self);
+    int errno = HTTP_PARSER_ERRNO(parser);
+    return errno != HPE_OK ? rb_str_new2(http_errno_description(errno)) : Qnil;
+}
+
 Init_http_parser() {
     mHTTP        = rb_define_module("HTTP");
     cParser      = rb_define_class_under(mHTTP,   "Parser", rb_cObject);
@@ -140,6 +151,8 @@ Init_http_parser() {
     rb_define_method(cParser, "pause",        rb_parser_pause,        0);
     rb_define_method(cParser, "resume",       rb_parser_resume,       0);
     rb_define_method(cParser, "paused?",      rb_parser_is_paused,    0);
+    rb_define_method(cParser, "error?",       rb_parser_error_q,      0);
+    rb_define_method(cParser, "error",        rb_parser_error,        0);
     rb_define_method(cParser, "http_method",  rb_parser_http_method,  0);
     rb_define_method(cParser, "http_version", rb_parser_http_version, 0);
     rb_define_method(cParser, "http_status",  rb_parser_http_status,  0);

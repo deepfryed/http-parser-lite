@@ -73,12 +73,18 @@ HTTP::Parser
     #resume
     #paused?
 
+    #error?
+    #error
 
 Constants:
 
 * HTTP::Parser::TYPE_REQUEST
 * HTTP::Parser::TYPE_RESPONSE
 * HTTP::Parser::TYPE_BOTH
+
+Exceptions:
+
+* HTTP::Parser::Error
 ```
 
 ## License

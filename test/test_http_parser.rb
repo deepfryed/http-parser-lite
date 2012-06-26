@@ -135,4 +135,22 @@ describe 'http-parser' do
     end
     assert parser.reset(0)
   end
+
+  it 'should expose parser error status' do
+    parser.reset(HTTP::Parser::TYPE_REQUEST)
+
+    assert parser << "GET / HTTP/1.1\r\n\r\n"
+    assert !parser.error?
+
+    assert_raises(HTTP::Parser::Error) do
+      parser << "HTTP/1.1 200 OK\r\nContent-Length: 0\r\n\r\n"
+    end
+    assert parser.error?
+    assert_match %r{invalid http method}i, parser.error
+
+    # reset should give you a clean slate
+    parser.reset(HTTP::Parser::TYPE_REQUEST)
+    assert !parser.error?
+    assert !parser.error
+  end
 end

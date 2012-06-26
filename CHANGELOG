@@ -1,6 +1,7 @@
-== 0.3.0 (2012-06-25)
+== 0.3.0 (2012-06-27)
 
 * Added optional type argument to Parser#initialize and Parser#reset
+* Added Parser#error? and Parser#error
 
 == 0.2.0 (2012-06-25)
 
