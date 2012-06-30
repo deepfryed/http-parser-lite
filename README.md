@@ -21,6 +21,10 @@ parser.on_message_complete do
   puts "message complete"
 end
 
+parser.on_headers_complete do
+  puts "value: #{value}"
+end
+
 parser.on_url do |url|
   puts "url: #{url}"
 end
@@ -63,6 +67,7 @@ HTTP::Parser
     #on_url(&block)
     #on_header_field(&block)
     #on_header_value(&block)
+    #on_headers_complete(&block)
     #on_body(&block)
 
     #http_status

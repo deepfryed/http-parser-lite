@@ -1,3 +1,7 @@
+== 0.4.0 (2012-06-30)
+
+* added missing on_headers_complete callback.
+
 == 0.3.0 (2012-06-27)
 
 * Added optional type argument to Parser#initialize and Parser#reset

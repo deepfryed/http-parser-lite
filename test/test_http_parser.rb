@@ -40,10 +40,11 @@ describe 'http-parser' do
     parser.on_url              {got << 'u'}
     parser.on_header_field     {got << 'f'}
     parser.on_header_value     {got << 'v'}
+    parser.on_headers_complete {got << 'h'}
     parser.on_body             {got << 'b'}
 
     parser << "POST / HTTP/1.0\r\nContent-Type: text/plain\r\nContent-Length: 5\r\n\r\nhello"
-    assert_equal %w(s u f v f v b e), got
+    assert_equal %w(s u f v f v h b e), got
   end
 
   it 'should parse chunked response' do
