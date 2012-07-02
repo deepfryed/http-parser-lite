@@ -22,7 +22,7 @@ parser.on_message_complete do
 end
 
 parser.on_headers_complete do
-  puts "value: #{value}"
+  puts "headers complete"
 end
 
 parser.on_url do |url|
