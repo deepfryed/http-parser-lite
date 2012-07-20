@@ -1,3 +1,7 @@
+== 0.5.0 (2012-07-21)
+
+* merged in pull/118 upstream to support url parsing with username and password.
+
 == 0.4.0 (2012-06-30)
 
 * added missing on_headers_complete callback.

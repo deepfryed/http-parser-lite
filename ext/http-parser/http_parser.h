@@ -141,7 +141,7 @@ enum flags
 
 
 /* Map for errno-related constants
- * 
+ *
  * The provided argument should be a macro that takes 2 arguments.
  */
 #define HTTP_ERRNO_MAP(XX)                                           \
@@ -256,7 +256,8 @@ enum http_parser_url_fields
   , UF_PATH             = 3
   , UF_QUERY            = 4
   , UF_FRAGMENT         = 5
-  , UF_MAX              = 6
+  , UF_USERINFO         = 6
+  , UF_MAX              = 7
   };
 
 

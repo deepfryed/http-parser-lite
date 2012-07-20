@@ -154,4 +154,17 @@ describe 'http-parser' do
     assert !parser.error?
     assert !parser.error
   end
+
+  it 'should parser urls with user:pass' do
+    parser.reset(HTTP::Parser::TYPE_REQUEST)
+
+    url  = 'http://foo:bar@example.org/test.cgi?param1=1'
+    data = []
+    parser.on_url {|url| data << url}
+
+    parser << "GET #{url} HTTP/1.0\r\n\r\n"
+
+    assert !parser.error?
+    assert_equal url, data.first
+  end
 end
