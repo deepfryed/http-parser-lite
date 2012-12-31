@@ -17,6 +17,7 @@ describe 'http-parser' do
     assert_equal %w(http://www.google.com X-Test-Key 1), got
     assert_equal 'GET', parser.http_method
     assert_equal '1.1', parser.http_version
+    assert_equal 'http://www.google.com', parser.url
   end
 
   it 'should parse response' do
@@ -166,5 +167,13 @@ describe 'http-parser' do
 
     assert !parser.error?
     assert_equal url, data.first
+  end
+
+  it '#reset should reset url' do
+    parser << "GET http://www.google.com HTTP/1.1\r\nX-Test-Key: 1\r\n\r\n"
+    assert !parser.url.nil?
+
+    parser.reset
+    assert parser.url.nil?
   end
 end

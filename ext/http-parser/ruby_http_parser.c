@@ -37,6 +37,7 @@ void rb_parser_callback_call(VALUE self, const char *name, char *data, size_t le
 
 int rb_parser_on_url(http_parser *parser, char *data, size_t length) {
     VALUE self = (VALUE)parser->data;
+    rb_iv_set(self, "@url", rb_str_new(data, length));
     rb_parser_callback_call(self, "on_url", data, length);
     return 0;
 }
@@ -98,6 +99,8 @@ VALUE rb_parser_parse(VALUE self, VALUE data) {
 VALUE rb_parser_reset_bang(VALUE self, VALUE type) {
     http_parser *parser = rb_http_parser_handle(self);
     http_parser_init(parser, FIX2INT(type));
+
+    rb_iv_set(self, "@url", Qnil);
     return Qtrue;
 }
 
