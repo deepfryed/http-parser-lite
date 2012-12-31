@@ -74,6 +74,7 @@ HTTP::Parser
     #http_method
     #http_version
     #url
+    #body
 
     #pause
     #resume

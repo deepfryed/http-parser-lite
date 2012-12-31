@@ -14,7 +14,7 @@ module HTTP
       end
     end
 
-    attr_reader :type, :url
+    attr_reader :type, :url, :body
 
     def initialize type = TYPE_BOTH
       @callbacks = {}

@@ -29,8 +29,9 @@ describe 'http-parser' do
     parser << "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 5\r\n\r\nhello"
 
     assert_equal %w(Content-Type text/plain Content-Length 5 hello), got
-    assert_equal '1.1', parser.http_version
-    assert_equal 200,   parser.http_status
+    assert_equal '1.1',   parser.http_version
+    assert_equal 200,     parser.http_status
+    assert_equal 'hello', parser.body
   end
 
 
@@ -175,5 +176,13 @@ describe 'http-parser' do
 
     parser.reset
     assert parser.url.nil?
+  end
+
+  it '#reset should reset body' do
+    parser << "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 5\r\n\r\nhello"
+    assert !parser.body.nil?
+
+    parser.reset
+    assert parser.body.nil?
   end
 end
