@@ -153,7 +153,7 @@ VALUE rb_parser_error(VALUE self) {
     return errno != HPE_OK ? rb_str_new2(http_errno_description(errno)) : Qnil;
 }
 
-Init_http_parser() {
+void Init_http_parser() {
     mHTTP        = rb_define_module("HTTP");
     cParser      = rb_define_class_under(mHTTP,   "Parser", rb_cObject);
     eParserError = rb_define_class_under(cParser, "Error",  rb_eStandardError);
