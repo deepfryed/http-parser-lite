@@ -21,6 +21,10 @@ parser.on_message_complete do
   puts "message complete"
 end
 
+parser.on_status_complete do
+  puts "status complete"
+end
+
 parser.on_headers_complete do
   puts "headers complete"
 end
@@ -65,6 +69,7 @@ HTTP::Parser
     #on_message_begin(&block)
     #on_message_complete(&block)
     #on_url(&block)
+    #on_status_complete(&block)
     #on_header_field(&block)
     #on_header_value(&block)
     #on_headers_complete(&block)
