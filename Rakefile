@@ -35,7 +35,7 @@ task :compile do
 end
 
 Rake::TestTask.new(:test) do |test|
-  test.libs   << 'ext' << 'lib' << 'test'
+  test.libs   << 'ext' << 'test'
   test.pattern = 'test/**/test_*.rb'
   test.verbose = true
 end
