@@ -41,6 +41,12 @@ int rb_parser_on_url(http_parser *parser, char *data, size_t length) {
     return 0;
 }
 
+int rb_parser_on_status_complete(http_parser *parser) {
+    VALUE self = (VALUE)parser->data;
+    rb_parser_callback_call(self, "on_status_complete", 0, 0);
+    return 0;
+}
+
 int rb_parser_on_header_field(http_parser *parser, char *data, size_t length) {
     VALUE self = (VALUE)parser->data;
     rb_parser_callback_call(self, "on_header_field", data, length);
@@ -81,6 +87,7 @@ VALUE rb_parser_parse(VALUE self, VALUE data) {
     http_parser *parser = rb_http_parser_handle(self);
     http_parser_settings settings = {
         .on_url              = (http_data_cb)rb_parser_on_url,
+        .on_status_complete  = (http_cb)rb_parser_on_status_complete,
         .on_header_field     = (http_data_cb)rb_parser_on_header_field,
         .on_header_value     = (http_data_cb)rb_parser_on_header_value,
         .on_headers_complete = (http_cb)rb_parser_on_headers_complete,
