@@ -7,7 +7,7 @@ require 'rake/testtask'
 $rootdir = Pathname.new(__FILE__).dirname
 $gemspec = Gem::Specification.new do |s|
   s.name              = 'http-parser-lite'
-  s.version           = '0.5.1'
+  s.version           = '0.6.0'
   s.date              = Date.today    
   s.authors           = ['Bharanee Rathna']
   s.email             = ['deepfryed@gmail.com']
@@ -42,3 +42,9 @@ end
 
 task default: :test
 task :test => [:compile]
+
+desc 'tag release and build gem'
+task :release => [:test, :gemspec] do
+  system("git tag -m 'version #{$gemspec.version}' v#{$gemspec.version}") or raise "failed to tag release"
+  system("gem build #{$gemspec.name}.gemspec")
+end

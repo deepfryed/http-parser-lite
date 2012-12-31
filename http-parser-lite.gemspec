@@ -2,15 +2,15 @@
 
 Gem::Specification.new do |s|
   s.name = "http-parser-lite"
-  s.version = "0.5.1"
+  s.version = "0.6.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bharanee Rathna"]
-  s.date = "2012-07-25"
+  s.date = "2013-01-01"
   s.description = "A lite ruby wrapper around Joyent http-parser"
   s.email = ["deepfryed@gmail.com"]
   s.extensions = ["ext/http-parser/extconf.rb"]
-  s.files = ["ext/http-parser/ruby_http_parser.c", "ext/http-parser/http_parser.c", "ext/http-parser/http_parser.h", "ext/http-parser/extconf.rb", "test/helper.rb", "test/test_http_parser.rb", "lib/http-parser.rb", "lib/http-parser-lite.rb", "README.md", "CHANGELOG"]
+  s.files = ["ext/http-parser/http_parser.c", "ext/http-parser/ruby_http_parser.c", "ext/http-parser/http_parser.h", "ext/http-parser/extconf.rb", "test/helper.rb", "test/test_http_parser.rb", "lib/http-parser-lite.rb", "lib/http-parser.rb", "README.md", "CHANGELOG"]
   s.homepage = "http://github.com/deepfryed/http-parser-lite"
   s.require_paths = ["lib", "ext"]
   s.rubygems_version = "1.8.24"

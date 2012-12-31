@@ -1,3 +1,12 @@
+== 0.6.0 (2013-01-01)
+
+* Added on_status_complete callback (Oscar Del Ben).
+* Updated http_parser.c from joytent/http-parser.
+
+== 0.5.1 (2012-07-25)
+
+* Updated http_parser.c from joytent/http-parser.
+
 == 0.5.0 (2012-07-21)
 
 * merged in pull/118 upstream to support url parsing with username and password.
