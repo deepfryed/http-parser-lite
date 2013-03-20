@@ -98,6 +98,12 @@ describe 'http-parser' do
     assert_equal '1.1',     parser.http_version
   end
 
+  it 'should parse PATCH' do
+    parser << "PATCH http://example.com HTTP/1.1\r\nUser-Agent: X-Test-UA\r\n\r\n"
+
+    assert_equal 'PATCH', parser.http_method
+  end
+
   it 'should raise an error on invalid data' do
     assert_raises(HTTP::Parser::Error) { parser << "GET / foobar\r\n" }
   end

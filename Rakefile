@@ -42,8 +42,13 @@ if RUBY_PLATFORM =~ /java/
     ext.classpath = jars.map { |x| File.expand_path x }.join ':'
   end
 else
-  require 'rake/extensiontask'
-  Rake::ExtensionTask.new('http-parser', $gemspec)
+  #require 'rake/extensiontask'
+  #Rake::ExtensionTask.new('http-parser', $gemspec)
+  task :compile do
+    Dir.chdir('ext/http-parser') do
+      system('ruby extconf.rb && make -j2') or raise 'unable to compile http-parser'
+    end
+  end
 end
 
 Rake::TestTask.new(:test) do |test|
