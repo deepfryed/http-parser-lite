@@ -175,6 +175,7 @@ describe 'http-parser' do
     assert !parser.error
   end
 
+  if RUBY_PLATFORM !~ /java/
   it 'should parser urls with user:pass' do
     parser.reset(HTTP::Parser::TYPE_REQUEST)
 
@@ -186,5 +187,6 @@ describe 'http-parser' do
 
     assert !parser.error?
     assert_equal url, data.first
+  end
   end
 end
