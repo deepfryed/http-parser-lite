@@ -1,5 +1,3 @@
-require 'http-parser/http_parser'
-
 module HTTP
   class Parser
     TYPE_REQUEST  = 0
@@ -39,4 +37,12 @@ module HTTP
       reset!(@type)
     end
   end
+end
+
+if RUBY_PLATFORM =~ /java/
+  require_relative '../ext/vendor/http-parser.jar'
+  require 'http-parser.jar'
+  require 'ruby_http_parser'
+else
+  require 'http-parser/http_parser'
 end

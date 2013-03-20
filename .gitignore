@@ -2,6 +2,8 @@ ext/http-parser/*
 !ext/http-parser/*.rb
 !ext/http-parser/*.c
 !ext/http-parser/*.h
+!ext/http-parser/org
+!ext/http-parser/RubyHttpParserService.java
 pkg/
 tmp/
 *.gem
