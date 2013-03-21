@@ -97,6 +97,13 @@ Exceptions:
 * HTTP::Parser::Error
 ```
 
+## JRuby Support
+
+Based on
+[flyerhzm/http-parser.java](https://github.com/flyerhzm/http-parser.java),
+some code are borrowed from
+[http_parser.rb](https://github.com/tmm1/http_parser.rb)
+
 ## License
 
 MIT
