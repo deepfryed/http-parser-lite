@@ -181,8 +181,8 @@ describe 'http-parser' do
     assert !parser.error
   end
 
-  if RUBY_PLATFORM !~ /java/
   it 'should parser urls with user:pass' do
+    skip 'Not implemented in JRuby yet, see issues/2' if RUBY_PLATFORM =~ /java/
     parser.reset(HTTP::Parser::TYPE_REQUEST)
 
     url  = 'http://foo:bar@example.org/test.cgi?param1=1'
@@ -193,6 +193,5 @@ describe 'http-parser' do
 
     assert !parser.error?
     assert_equal url, data.first
-  end
   end
 end

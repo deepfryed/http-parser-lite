@@ -99,9 +99,7 @@ Exceptions:
 
 ## JRuby Support
 
-Based on
-[flyerhzm/http-parser.java](https://github.com/flyerhzm/http-parser.java),
-some code are borrowed from
+Based on [flyerhzm/http-parser.java](https://github.com/flyerhzm/http-parser.java), some code has been borrowed from
 [http_parser.rb](https://github.com/tmm1/http_parser.rb)
 
 ## License

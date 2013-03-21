@@ -35,15 +35,13 @@ desc 'compile extension'
 if RUBY_PLATFORM =~ /java/
   require 'rake/javaextensiontask'
   Rake::JavaExtensionTask.new('http-parser', $gemspec) do |ext|
-    jruby_home = RbConfig::CONFIG['prefix']
+    jruby_home  = RbConfig::CONFIG['prefix']
     ext.ext_dir = 'ext/http-parser'
     ext.lib_dir = 'lib'
     jars = ["#{jruby_home}/lib/jruby.jar"] + FileList['ext/vendor/*.jar']
-    ext.classpath = jars.map { |x| File.expand_path x }.join ':'
+    ext.classpath = jars.map {|x| File.expand_path x}.join ':'
   end
 else
-  #require 'rake/extensiontask'
-  #Rake::ExtensionTask.new('http-parser', $gemspec)
   task :compile do
     Dir.chdir('ext/http-parser') do
       system('ruby extconf.rb && make -j2') or raise 'unable to compile http-parser'
