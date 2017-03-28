@@ -78,6 +78,8 @@ HTTP::Parser
     #http_status
     #http_method
     #http_version
+    #url
+    #body
 
     #pause
     #resume

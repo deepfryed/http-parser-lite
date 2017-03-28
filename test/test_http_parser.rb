@@ -17,6 +17,7 @@ describe 'http-parser' do
     assert_equal %w(http://www.google.com X-Test-Key 1), got
     assert_equal 'GET', parser.http_method
     assert_equal '1.1', parser.http_version
+    assert_equal 'http://www.google.com', parser.url
   end
 
   it 'should parse response' do
@@ -28,8 +29,9 @@ describe 'http-parser' do
     parser << "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 5\r\n\r\nhello"
 
     assert_equal %w(Content-Type text/plain Content-Length 5 hello), got
-    assert_equal '1.1', parser.http_version
-    assert_equal 200,   parser.http_status
+    assert_equal '1.1',   parser.http_version
+    assert_equal 200,     parser.http_status
+    assert_equal 'hello', parser.body
   end
 
 
@@ -193,5 +195,21 @@ describe 'http-parser' do
 
     assert !parser.error?
     assert_equal url, data.first
+  end
+
+  it '#reset should reset url' do
+    parser << "GET http://www.google.com HTTP/1.1\r\nX-Test-Key: 1\r\n\r\n"
+    assert !parser.url.nil?
+
+    parser.reset
+    assert parser.url.nil?
+  end
+
+  it '#reset should reset body' do
+    parser << "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 5\r\n\r\nhello"
+    assert !parser.body.nil?
+
+    parser.reset
+    assert parser.body.nil?
   end
 end
