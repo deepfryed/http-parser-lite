@@ -54,17 +54,19 @@ describe 'http-parser' do
     got = []
     parser.on_message_begin    {got << 's'}
     parser.on_message_complete {got << 'e'}
-    parser.on_status_complete  {got << 'S'}
     parser.on_header_field     {got << 'f'}
     parser.on_header_value     {got << 'v'}
     parser.on_headers_complete {got << 'h'}
     parser.on_body             {got << 'b'}
 
+    parser.on_status_complete  {got << 'S'}
+    parser.on_status           {got << 'C'}
+
     # Should not be called
     parser.on_url              {got << 'X'}
 
     parser << "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 5\r\n\r\nhello"
-    assert_equal %w(s S f v f v h b e), got
+    assert_equal %w(s S C f v f v h b e), got
   end
 
   it 'should parse chunked response' do
@@ -73,6 +75,7 @@ describe 'http-parser' do
     parser.on_header_field {|data| got << data}
     parser.on_header_value {|data| got << data}
     parser.on_body         {|data| got << data}
+    parser.on_status       {|data| got << data}
     parser << "HTTP/1.1 404 OK\r\nContent-Type: text/plain\r\nTransfer-Encoding: chunked\r\n\r\n"
     parser << "8\r\n"
     parser << "document\r\n"
@@ -83,7 +86,7 @@ describe 'http-parser' do
     parser << "0\r\n"
 
     assert_equal 404, parser.http_status
-    assert_equal %w(Content-Type text/plain Transfer-Encoding chunked document not found), got
+    assert_equal %w(OK Content-Type text/plain Transfer-Encoding chunked document not found), got
   end
 
   it 'should parse CONNECT' do

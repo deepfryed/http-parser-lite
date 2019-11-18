@@ -8,7 +8,7 @@ require 'rubygems/package_task'
 $rootdir = Pathname.new(__FILE__).dirname
 $gemspec = Gem::Specification.new do |s|
   s.name              = 'http-parser-lite'
-  s.version           = '0.6.0'
+  s.version           = '1.0.0'
   s.date              = Date.today
   s.authors           = ['Bharanee Rathna']
   s.email             = ['deepfryed@gmail.com']

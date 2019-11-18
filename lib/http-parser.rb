@@ -10,6 +10,7 @@ module HTTP
       on_headers_complete
       on_message_begin
       on_message_complete
+      on_status
       on_status_complete
       on_url
     )
