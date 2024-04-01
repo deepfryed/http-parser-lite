@@ -149,8 +149,8 @@ VALUE rb_parser_error_q(VALUE self) {
 
 VALUE rb_parser_error(VALUE self) {
     http_parser *parser = rb_http_parser_handle(self);
-    int errno = HTTP_PARSER_ERRNO(parser);
-    return errno != HPE_OK ? rb_str_new2(http_errno_description(errno)) : Qnil;
+    int http_errno = HTTP_PARSER_ERRNO(parser);
+    return http_errno != HPE_OK ? rb_str_new2(http_errno_description(http_errno)) : Qnil;
 }
 
 void Init_http_parser() {

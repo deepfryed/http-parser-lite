@@ -1,5 +1,7 @@
 module HTTP
   class Parser
+    VERSION = '1.0.0'.freeze
+
     TYPE_REQUEST  = 0
     TYPE_RESPONSE = 1
     TYPE_BOTH     = 2
