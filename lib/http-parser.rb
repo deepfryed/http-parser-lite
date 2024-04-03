@@ -1,6 +1,6 @@
 module HTTP
   class Parser
-    VERSION = '1.0.0'.freeze
+    VERSION = '1.0.1'.freeze
 
     TYPE_REQUEST  = 0
     TYPE_RESPONSE = 1
@@ -46,5 +46,9 @@ if RUBY_PLATFORM =~ /java/
   require 'http-parser.jar'
   require 'ruby_http_parser'
 else
-  require 'http-parser/http_parser'
+  begin
+    require_relative 'http_parser'
+  rescue LoadError
+    require 'http-parser/http_parser'
+  end
 end

@@ -7,3 +7,4 @@ ext/http-parser/*
 pkg/
 tmp/
 *.gem
+.tool-versions
